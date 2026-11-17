@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Finalizar pedido | Cupcake Gourmet{% endblock %}
+{% block content %}
+<section class="page-intro"><span class="eyebrow">QUASE LÁ</span><h1>Finalizar pedido</h1><p>Preencha seus dados para registrar o pedido de demonstração.</p></section>
+<div class="two-col"><form class="panel checkout-form" method="post" action="{{ url_for('site.checkout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Seus dados</h2><label for="nome">Nome completo *</label><input id="nome" name="nome" type="text" minlength="2" maxlength="100" value="{{ request.form.get('nome', '') }}" required autocomplete="name" placeholder="Ex.: Maria Silva">
+  <label for="telefone">Telefone *</label><input id="telefone" name="telefone" type="tel" minlength="8" maxlength="30" value="{{ request.form.get('telefone', '') }}" required autocomplete="tel" placeholder="Ex.: (11) 99999-9999">
+  <h2>Como deseja receber?</h2><div class="radio-group"><label><input type="radio" name="modalidade" value="RETIRADA" {% if request.form.get('modalidade', 'RETIRADA') == 'RETIRADA' %}checked{% endif %}> Retirada na loja • grátis</label><label><input type="radio" name="modalidade" value="ENTREGA" {% if request.form.get('modalidade') == 'ENTREGA' %}checked{% endif %}> Entrega • {{ fee | reais }}</label></div>
+  <div data-address-group><label for="endereco">Endereço para entrega *</label><textarea id="endereco" name="endereco" rows="3" placeholder="Rua, número, bairro e cidade">{{ request.form.get('endereco','') }}</textarea></div>
+  <p class="notice">Este é um projeto acadêmico. Nenhum pagamento real será realizado. Não utilize dados pessoais reais para testar.</p>
+  <button class="btn btn-primary block" type="submit">Registrar pedido de demonstração</button>
+</form><aside class="panel summary"><h2>Seu pedido</h2>{% for line in lines %}<div class="summary-row"><span>{{ line.qty }}× {{ line.product['nome'] }}</span><strong>{{ line.subtotal | reais }}</strong></div>{% endfor %}<hr><div class="summary-row"><span>Subtotal</span><strong>{{ subtotal | reais }}</strong></div><div class="summary-row"><span>Taxa de entrega</span><span>R$ 0,00 ou {{ fee | reais }}</span></div><p class="muted">O valor final aparece na confirmação após escolher a modalidade.</p></aside></div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Meu carrinho | Cupcake Gourmet{% endblock %}
+{% block content %}
+<section class="page-intro"><span class="eyebrow">SEU PEDIDO</span><h1>Meu carrinho</h1><p>Revise os sabores antes de continuar.</p></section>
+{% if lines %}
+<div class="two-col"><div class="panel">
+  {% for line in lines %}<div class="cart-line"><div class="item-emoji">{{ line.product['emoji'] }}</div><div class="line-info"><h2>{{ line.product['nome'] }}</h2><p>{{ line.product['preco_centavos'] | reais }} a unidade</p>{% if not line.product['disponivel'] %}<p class="error-text">Produto indisponível, remova para continuar.</p>{% endif %}</div>
+    <form method="post" action="{{ url_for('site.update_cart', product_id=line.product['id']) }}" class="quantity-form"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label for="q{{ line.product['id'] }}">Quantidade</label><input id="q{{ line.product['id'] }}" name="quantidade" type="number" min="1" max="99" value="{{ line.qty }}"><button class="btn btn-outline" type="submit">Atualizar</button></form>
+    <div class="line-price"><strong>{{ line.subtotal | reais }}</strong><form method="post" action="{{ url_for('site.remove_cart', product_id=line.product['id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="link-danger" type="submit">Remover</button></form></div>
+  </div>{% endfor %}
+  <a class="text-link" href="{{ url_for('site.index') }}">← Continuar escolhendo cupcakes</a>
+</div><aside class="summary panel"><h2>Resumo</h2><div class="summary-row"><span>Subtotal</span><strong>{{ subtotal | reais }}</strong></div><p class="muted">Entrega: R$ 5,00 se selecionada. Retirada: grátis.</p><div class="summary-total"><span>Subtotal</span><strong>{{ subtotal | reais }}</strong></div><a class="btn btn-primary block" href="{{ url_for('site.checkout') }}">Continuar para o pedido →</a></aside></div>
+{% else %}<div class="empty-box"><div class="empty-icon">🛒</div><h2>Seu carrinho está vazio</h2><p>Que tal escolher um cupcake para começar?</p><a href="{{ url_for('site.index') }}" class="btn btn-primary">Ver sabores</a></div>{% endif %}
+{% endblock %}

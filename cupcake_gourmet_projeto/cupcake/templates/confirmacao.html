@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Pedido registrado | Cupcake Gourmet{% endblock %}
+{% block content %}
+<div class="success-page"><div class="success-check">✓</div><span class="eyebrow">PEDIDO REGISTRADO</span><h1>Pedido de demonstração criado!</h1><p>Obrigado, {{ order['cliente_nome'] }}. Veja os detalhes abaixo.</p>
+<div class="panel receipt"><h2>Pedido #{{ order['id'] }}</h2><p class="muted">Status: Recebido • {{ 'Entrega' if order['modalidade'] == 'ENTREGA' else 'Retirada na loja' }}</p>{% for item in items %}<div class="summary-row"><span>{{ item['quantidade'] }}× {{ item['nome_produto_historico'] }}</span><strong>{{ (item['quantidade'] * item['preco_unitario_centavos']) | reais }}</strong></div>{% endfor %}<hr><div class="summary-row"><span>Entrega</span><strong>{{ order['taxa_entrega_centavos'] | reais }}</strong></div><div class="summary-total"><span>Total</span><strong>{{ order['total_centavos'] | reais }}</strong></div></div>
+<p class="notice">Esta é uma simulação acadêmica: nenhum pagamento foi recebido e nenhuma entrega real foi solicitada.</p><a href="{{ url_for('site.index') }}" class="btn btn-primary">Voltar ao catálogo</a></div>
+{% endblock %}

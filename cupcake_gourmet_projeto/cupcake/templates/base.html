@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cupcake Gourmet - projeto acadêmico demonstrativo de pedidos online">
+  <title>{% block title %}Cupcake Gourmet{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <div class="demo-banner">Projeto acadêmico demonstrativo • Não realiza pagamentos reais nem confirma entregas comerciais.</div>
+  <header class="topbar">
+    <div class="container nav-row">
+      <a class="brand" href="{{ url_for('site.index') }}" aria-label="Cupcake Gourmet, início"><span class="brand-icon">🧁</span> <span>Cupcake <em>Gourmet</em></span></a>
+      <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false">☰ <span class="sr-only">Abrir menu</span></button>
+      <nav class="main-nav" id="main-nav" aria-label="Menu principal">
+        <a href="{{ url_for('site.index') }}">Catálogo</a>
+        <a href="{{ url_for('site.cart') }}">Meu carrinho <span class="cart-badge">{{ cart_count }}</span></a>
+        {% if admin_logged_in %}<a href="{{ url_for('site.admin_dashboard') }}">Administração</a>
+        {% else %}<a href="{{ url_for('site.login') }}">Área da loja</a>{% endif %}
+      </nav>
+    </div>
+  </header>
+  <main class="container" id="conteudo">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="flash-area" aria-live="polite">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer"><div class="container footer-content"><span>🧁 Cupcake Gourmet</span><span>Protótipo acadêmico de Engenharia de Software II</span></div></footer>
+</body>
+</html>

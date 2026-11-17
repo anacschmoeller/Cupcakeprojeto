@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Entrar na administração | Cupcake Gourmet{% endblock %}
+{% block content %}
+<div class="login-wrap panel"><div class="login-icon">🔐</div><span class="eyebrow">ACESSO RESTRITO</span><h1>Área da loja</h1><p>Entre com as credenciais do administrador.</p><form method="post" action="{{ url_for('site.login') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label for="usuario">Usuário</label><input name="usuario" id="usuario" type="text" autocomplete="username" required><label for="senha">Senha</label><input name="senha" id="senha" type="password" autocomplete="current-password" required><button class="btn btn-primary block" type="submit">Entrar</button></form><p class="muted">A senha é criada pelo comando indicado no README; o projeto não inclui senha padrão.</p></div>
+{% endblock %}

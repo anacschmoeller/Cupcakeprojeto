@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo | Cupcake Gourmet{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">DOCES MOMENTOS EM CADA PEDIDO</span>
+    <h1>Um pedacinho de felicidade em cada cupcake.</h1>
+    <p>Conheça nossos sabores e monte seu pedido de demonstração. Tudo de um jeito simples e gostoso!</p>
+    <a href="#sabores" class="btn btn-primary">Explorar sabores <span aria-hidden="true">↓</span></a>
+  </div>
+  <div class="hero-visual" aria-hidden="true"><div class="hero-orbit"></div><div class="cupcake-big">🧁</div><span class="sparkle s1">✦</span><span class="sparkle s2">✦</span></div>
+</section>
+<section class="catalog-section" id="sabores">
+  <div class="section-heading"><div><span class="eyebrow">FEITOS PARA ENCANTAR</span><h2>Escolha seus favoritos</h2></div><span class="hint">Sabores especiais para você</span></div>
+  <label class="search-label" for="buscar">Buscar pelo nome ou descrição</label>
+  <input type="search" id="buscar" placeholder="Ex.: chocolate, morango..." autocomplete="off" data-search>
+  <div class="product-grid" id="lista-produtos">
+    {% for produto in products %}
+    <article class="product-card" data-product="{{ (produto['nome'] + ' ' + produto['descricao']) | lower }}">
+      <div class="product-art art-{{ loop.index0 % 4 }}"><span aria-hidden="true">{{ produto['emoji'] }}</span></div>
+      <div class="product-body"><div class="product-tag">FEITO COM CARINHO</div><h3>{{ produto['nome'] }}</h3><p>{{ produto['descricao'] }}</p>
+        <div class="product-bottom"><strong>{{ produto['preco_centavos'] | reais }}</strong>
+          <form method="post" action="{{ url_for('site.add_cart', product_id=produto['id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-small" type="submit">+ Adicionar</button></form>
+        </div>
+      </div>
+    </article>
+    {% else %}<p class="empty-state">Nenhum cupcake disponível no momento.</p>{% endfor %}
+  </div>
+  <p class="empty-state" id="sem-resultado" hidden>Nenhum cupcake corresponde à sua busca.</p>
+</section>
+{% endblock %}
