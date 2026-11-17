@@ -16,6 +16,7 @@
       <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false">☰ <span class="sr-only">Abrir menu</span></button>
       <nav class="main-nav" id="main-nav" aria-label="Menu principal">
         <a href="{{ url_for('site.index') }}">Catálogo</a>
+        <a href="{{ url_for('site.acompanhar_pedido') }}">Acompanhar pedido</a>
         <a href="{{ url_for('site.cart') }}">Meu carrinho <span class="cart-badge">{{ cart_count }}</span></a>
         {% if admin_logged_in %}<a href="{{ url_for('site.admin_dashboard') }}">Administração</a>
         {% else %}<a href="{{ url_for('site.login') }}">Área da loja</a>{% endif %}
