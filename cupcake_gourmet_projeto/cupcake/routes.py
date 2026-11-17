@@ -180,7 +180,38 @@ def confirmation(token):
     items = db.execute("SELECT * FROM itens_pedido WHERE pedido_id=?", (order["id"],)).fetchall()
     return render_template("confirmacao.html", order=order, items=items)
 
+@site.route("/acompanhar", methods=["GET", "POST"])
+def acompanhar_pedido():
+    erro = None
+    resultado = None
 
+    if request.method == "POST":
+        numero = request.form.get("numero_pedido", "").strip()
+        telefone = request.form.get("telefone", "").strip()
+
+        if not numero.isdecimal() or int(numero) < 1 or not telefone:
+            erro = "Informe um número de pedido e um telefone válidos."
+        else:
+            db = get_db()
+            resultado = db.execute(
+                """
+                SELECT p.id, p.status
+                FROM pedidos p
+                JOIN clientes c ON c.id = p.cliente_id
+                WHERE p.id = ? AND c.telefone = ?
+                """,
+                (int(numero), telefone)
+            ).fetchone()
+
+            if resultado is None:
+                erro = "Pedido não encontrado. Confira os dados informados."
+
+    return render_template(
+        "acompanhar.html",
+        erro=erro,
+        resultado=resultado,
+        status_labels=STATUS_LABELS
+    )
 @site.route("/admin/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
