@@ -17,7 +17,35 @@
   <div class="product-grid" id="lista-produtos">
     {% for produto in products %}
     <article class="product-card" data-product="{{ (produto['nome'] + ' ' + produto['descricao']) | lower }}">
-      <div class="product-art art-{{ loop.index0 % 4 }}"><span aria-hidden="true">{{ produto['emoji'] }}</span></div>
+
+
+<div class="product-art art-{{ loop.index0 % 4 }}">
+  {% set nome = produto['nome'] | lower %}
+
+  {% if 'baunilha' in nome %}
+    {% set foto = 'baunilha.jpg' %}
+  {% elif 'chocolate' in nome %}
+    {% set foto = 'chocolatebelga.jpg' %}
+  {% elif 'doce de leite' in nome %}
+    {% set foto = 'docedeleite.jpg' %}
+  {% elif 'limão' in nome or 'limao' in nome %}
+    {% set foto = 'limao.jpg' %}
+  {% elif 'morango' in nome %}
+    {% set foto = 'morango.jpg' %}
+  {% elif 'red velvet' in nome %}
+    {% set foto = 'redvelvet.jpg' %}
+  {% else %}
+    {% set foto = none %}
+  {% endif %}
+
+  {% if foto %}
+    <img src="{{ url_for('static', filename='imagens/' ~ foto) }}"
+         alt="Cupcake {{ produto['nome'] }}"
+         style="width: 100%; height: 100%; object-fit: cover; display: block;">
+  {% else %}
+    <span aria-hidden="true">{{ produto['emoji'] }}</span>
+  {% endif %}
+</div>
       <div class="product-body"><div class="product-tag">FEITO COM CARINHO</div><h3>{{ produto['nome'] }}</h3><p>{{ produto['descricao'] }}</p>
         <div class="product-bottom"><strong>{{ produto['preco_centavos'] | reais }}</strong>
           <form method="post" action="{{ url_for('site.add_cart', product_id=produto['id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-small" type="submit">+ Adicionar</button></form>
